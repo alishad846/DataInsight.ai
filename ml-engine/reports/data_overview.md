@@ -1,5 +1,5 @@
 # Dataset Overview – Superstore Sales
-## Dataset Sourcen - Kaggle (https://www.kaggle.com/datasets/fatihilhan/global-superstore-dataset?resource=download)
+## Dataset Source - Kaggle (https://www.kaggle.com/datasets/fatihilhan/global-superstore-dataset?resource=download)
 ## Number of Rows - 51,290 rows
 ## Number of Columns - 27 columns
 ## Column Names -
@@ -62,3 +62,18 @@
 - State
 - Sub.Category
 - Market2
+
+## Total missing values: 0
+
+## Data Quality Issues
+- Column name `记录数` contains non-English characters.
+- Date columns are stored as string format and may require parsing.
+- Customer.Name contains special characters.
+
+
+## Possible Use Case -
+This dataset can be used for:
+1.Sales performance analysis
+2.Regional profit comparison
+3.Customer segmentation analysis
+4.Time-based sales trend forecasting
