@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
 
-df = pd.read_csv("data/cleaned/cleaned_1766916072663-small_business_sales.csv") ##lode the cleaned dataset
+df = pd.read_csv("../data/cleaned/cleaned_1766916072663-small_business_sales.csv") ##lode the cleaned dataset
 print("Dataset Shape:", df.shape)
 
 
