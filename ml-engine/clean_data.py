@@ -12,7 +12,7 @@ def clean_data(file_path):
     # remove duplicate rows
     df = df.drop_duplicates()
 
-    # missing values
+    # missing values report
     report["missing_values"] = df.isnull().sum().to_dict()
 
     # drop columns with >50% missing
@@ -21,32 +21,13 @@ def clean_data(file_path):
 
     # fill numeric nulls with mean
     for col in df.select_dtypes(include=["int64", "float64"]).columns:
-        df[col].fillna(df[col].mean(), inplace=True)
+        df[col] = df[col].fillna(df[col].mean())
 
     # fill categorical nulls with mode
     for col in df.select_dtypes(include=["object"]).columns:
-        df[col].fillna(df[col].mode()[0], inplace=True)
+        if not df[col].mode().empty:
+            df[col] = df[col].fillna(df[col].mode()[0])
 
     report["cleaned_shape"] = df.shape
 
     return df, report
-
-
-if __name__ == "__main__":
-    input_path = sys.argv[1]
-
-    os.makedirs("data/cleaned", exist_ok=True)
-    os.makedirs("reports", exist_ok=True)
-
-    cleaned_df, analysis = clean_data(input_path)
-
-    output_file = f"data/cleaned/cleaned_{os.path.basename(input_path)}"
-    cleaned_df.to_csv(output_file, index=False)
-
-    with open("reports/analysis.json", "w") as f:
-        json.dump(analysis, f, indent=4)
-
-    print(json.dumps({
-        "cleaned_file": output_file,
-        "report_file": "reports/analysis.json"
-    }))
