@@ -36,14 +36,26 @@ export const uploadDataset = async (req, res) => {
       });
     }
 
+    /* Extract optional user inputs */
+    const { target_column, dataset_description } = req.body || {};
+
+    /* Create dataset _id before inserting */
+    const datasetId = new mongoose.Types.ObjectId();
+
     const dataset = await Dataset.create({
+      _id: datasetId,
+
       job_id,
       filename: req.file.originalname,
       filepath: absoluteFilePath,
+
+      optional_inputs: {
+        target_column: target_column || null,
+        dataset_description: dataset_description || null
+      },
+
       status: "UPLOADED"
     });
-
-    const datasetId = dataset._id.toString();
 
     console.log("Dataset stored:", datasetId);
 

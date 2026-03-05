@@ -22,6 +22,39 @@ const DatasetSchema = new mongoose.Schema(
       required: true,
     },
 
+    /* ---------- OPTIONAL USER INPUTS ---------- */
+    optional_inputs: {
+      target_column: {
+        type: String,
+        default: null,
+      },
+
+      dataset_description: {
+        type: String,
+        maxlength: 200,
+        default: null,
+      },
+    },
+
+    /* ---------- SYSTEM METADATA (ADDED BY WORKER LATER) ---------- */
+    system_metadata: {
+      system_selected_target_column: {
+        type: String,
+        default: null,
+      },
+
+      dropped_columns: {
+        type: [String],
+        default: [],
+      },
+
+      problem_type: {
+        type: String,
+        enum: ["classification", "regression"],
+        default: null,
+      },
+    },
+
     /* ---------- JOB STATE MACHINE ---------- */
     status: {
       type: String,
@@ -65,7 +98,6 @@ const DatasetSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-
   },
   {
     timestamps: true,
