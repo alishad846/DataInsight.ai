@@ -1,81 +1,87 @@
 import Dataset from "../models/Dataset.js";
+import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import mongoose from "mongoose";
+import { createJob } from "../services/jobService.js";
 
 export const uploadDataset = async (req, res) => {
   try {
-    console.log("📤 Upload request received");
-    console.log("File:", req.file ? {
-      originalname: req.file.originalname,
-      size: req.file.size,
-      path: req.file.path,
-      mimetype: req.file.mimetype
-    } : "No file");
+
+    const job_id = uuidv4(); // CREATES A JOB_ID
 
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: "No file uploaded. Use key 'file'.",
+        message: "No file uploaded. Use key 'file'."
       });
     }
 
-    // Check if MongoDB is connected
-    const isMongoConnected = mongoose.connection.readyState === 1;
-    
-    if (!isMongoConnected) {
-      console.warn("⚠️ MongoDB is not connected - using fallback mode");
-      // Fallback: return file info without saving to database
-      const fallbackId = `temp-${Date.now()}`;
-      return res.status(200).json({
-        success: true,
-        datasetId: fallbackId,
-        path: path.resolve(req.file.path),
-        originalName: req.file.originalname,
-        size: req.file.size,
-        data: {
-          _id: fallbackId,
-          id: fallbackId,
-          path: path.resolve(req.file.path),
-          filename: req.file.originalname,
-        },
-        warning: "File uploaded but not saved to database. MongoDB connection required for persistence.",
+    const absoluteFilePath = path.resolve(req.file.path);
+
+    const fileInfo = {
+      originalname: req.file.originalname,
+      size: req.file.size,
+      mimetype: req.file.mimetype,
+      path: absoluteFilePath
+    };
+
+    console.log("Upload request received:", fileInfo);
+
+    const mongoConnected = mongoose.connection.readyState === 1;
+
+    if (!mongoConnected) {
+      return res.status(500).json({
+        success: false,
+        message: "MongoDB is not connected. Upload aborted."
       });
     }
 
-    console.log("💾 Saving to database...");
-    // Save dataset to database
     const dataset = await Dataset.create({
+      job_id,
       filename: req.file.originalname,
-      filepath: path.resolve(req.file.path),
-      status: "uploaded",
+      filepath: absoluteFilePath,
+      status: "UPLOADED"
     });
 
-    console.log("✅ Dataset saved:", dataset._id.toString());
+    const datasetId = dataset._id.toString();
+
+    console.log("Dataset stored:", datasetId);
+
+    const job = await createJob({
+      job_id,
+      dataset_id: datasetId,
+      filepath: absoluteFilePath
+    });
+
+    console.log("Job created:", job.job_id);
 
     return res.status(200).json({
       success: true,
-      datasetId: dataset._id.toString(),
-      path: dataset.filepath,
-      originalName: dataset.filename,
-      size: req.file.size,
-      data: {
-        _id: dataset._id.toString(),
-        id: dataset._id.toString(),
-        path: dataset.filepath,
+      dataset: {
+        dataset_id: datasetId,
         filename: dataset.filename,
+        filepath: dataset.filepath
       },
+      job: {
+        job_id: job.job_id,
+        stage: job.stage
+      },
+      file: {
+        size: req.file.size,
+        mimetype: req.file.mimetype
+      },
+      message: "Dataset uploaded successfully. Processing job created."
     });
+
   } catch (error) {
-    console.error("❌ UPLOAD ERROR:", error);
-    console.error("Error stack:", error.stack);
-    console.error("Error name:", error.name);
-    console.error("Error message:", error.message);
-    
-    // Send detailed error message to frontend
-    res.status(500).json({ 
-      success: false, 
+
+    console.error("Upload error:", error);
+
+    return res.status(500).json({
+      success: false,
       message: error.message || "Upload failed",
-      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      stack: process.env.NODE_ENV === "development" ? error.stack : undefined
     });
+
   }
 };

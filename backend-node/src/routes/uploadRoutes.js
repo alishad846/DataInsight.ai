@@ -52,7 +52,7 @@ const upload = multer({
   },
 });
 
-router.post("/upload", (req, res, next) => {
+router.post("/", (req, res, next) => { // before -> '/upload'    after -> '/' because index.js has /api/uploads
   upload.single("file")(req, res, (err) => {
     if (err) {
       if (err instanceof multer.MulterError) {

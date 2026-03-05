@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
 
-/* ----------------------------------------
-   Dataset Schema
-   Handles full ML lifecycle metadata
----------------------------------------- */
-
 const DatasetSchema = new mongoose.Schema(
   {
+    /* ---------- EXTERNAL JOB ID ---------- */
+    job_id: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+
     /* ---------- BASIC FILE INFO ---------- */
     filename: {
       type: String,
@@ -19,14 +22,30 @@ const DatasetSchema = new mongoose.Schema(
       required: true,
     },
 
-    /* ---------- PIPELINE STATUS ---------- */
+    /* ---------- JOB STATE MACHINE ---------- */
     status: {
       type: String,
-      enum: ["uploaded", "cleaned", "trained", "ready"],
-      default: "uploaded",
+      enum: [
+        "UPLOADED",
+        "ETL_RUNNING",
+        "ETL_COMPLETED",
+        "TRAINING_RUNNING",
+        "TRAINING_COMPLETED",
+        "REPORT_GENERATED",
+        "INDEXED",
+        "COMPLETED",
+        "FAILED",
+      ],
+      default: "UPLOADED",
     },
 
-    /* ---------- ML PIPELINE ARTIFACTS ---------- */
+    /* ---------- ERROR HANDLING ---------- */
+    error_message: {
+      type: String,
+      default: null,
+    },
+
+    /* ---------- ML ARTIFACTS ---------- */
     cleanedFilePath: {
       type: String,
       default: null,
@@ -47,14 +66,9 @@ const DatasetSchema = new mongoose.Schema(
       default: null,
     },
 
-    /* ---------- METADATA ---------- */
-    uploadedAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   {
-    timestamps: true, // adds createdAt & updatedAt
+    timestamps: true,
   }
 );
 
