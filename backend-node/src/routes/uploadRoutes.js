@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ 
+const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
     // Allow CSV, Excel, and JSON files
@@ -34,10 +34,10 @@ const upload = multer({
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "application/json",
     ];
-    
+
     const allowedExtensions = [".csv", ".xlsx", ".xls", ".json"];
     const fileExt = path.extname(file.originalname).toLowerCase();
-    
+
     if (
       allowedMimes.includes(file.mimetype) ||
       allowedExtensions.includes(fileExt)
@@ -52,7 +52,7 @@ const upload = multer({
   },
 });
 
-router.post("/upload", (req, res, next) => {
+router.post("/", (req, res, next) => { // before -> '/upload'    after -> '/' because index.js has /api/uploads
   upload.single("file")(req, res, (err) => {
     if (err) {
       if (err instanceof multer.MulterError) {

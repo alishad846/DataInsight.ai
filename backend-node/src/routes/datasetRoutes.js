@@ -1,45 +1,80 @@
 import express from "express";
-import { protect } from "../middleware/authMiddleware.js";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import { uploadDataset } from "../controllers/uploadController.js";
 
-import {
-  getAllDatasets,
-  getDatasetById,
-  updateDatasetStatus,
-  cleanDataset,
-  trainDataset,
-  getAnalysis,
-  getMetrics,
-} from "../controllers/datasetController.js";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const router = express.Router();
 
-/* =====================================================
-   DATASET MANAGEMENT (PROTECTED)
-===================================================== */
+// Use __dirname to ensure uploads folder is in backend-node directory
+const uploadDir = path.join(__dirname, "../../uploads");
+if (!fs.existsSync(uploadDir)) {
+   fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-// Get all datasets
-router.get("/datasets", protect, getAllDatasets);
+const storage = multer.diskStorage({
+   destination: uploadDir,
+   filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+   },
+});
 
-// Get dataset by ID
-router.get("/datasets/:id", protect, getDatasetById);
+const upload = multer({
+   storage,
+   fileFilter: (req, file, cb) => {
+      // Allow CSV, Excel, and JSON files
+      const allowedMimes = [
+         "text/csv",
+         "application/vnd.ms-excel",
+         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+         "application/json",
+      ];
 
-// Update dataset status (admin / debug)
-router.patch("/datasets/:id/status", protect, updateDatasetStatus);
+      const allowedExtensions = [".csv", ".xlsx", ".xls", ".json"];
+      const fileExt = path.extname(file.originalname).toLowerCase();
 
-/* =====================================================
-   ML PIPELINE AUTOMATION (PROTECTED)
-===================================================== */
+      if (
+         allowedMimes.includes(file.mimetype) ||
+         allowedExtensions.includes(fileExt)
+      ) {
+         cb(null, true);
+      } else {
+         cb(new Error("Invalid file type. Only CSV, Excel, or JSON files are allowed."));
+      }
+   },
+   limits: {
+      fileSize: 50 * 1024 * 1024, // 50MB limit
+   },
+});
 
-// Clean dataset (Python script)
-router.post("/datasets/:id/clean",  cleanDataset);
-
-// Train ML model (Python script)
-router.post("/datasets/:id/train",  trainDataset);
-
-// Get data analysis report
-router.get("/datasets/:id/analysis", protect, getAnalysis);
-
-// Get trained model metrics
-router.get("/datasets/:id/metrics", protect, getMetrics);
+router.post("/", (req, res, next) => { // before -> '/upload'    after -> '/' because index.js has /api/uploads
+   upload.single("file")(req, res, (err) => {
+      if (err) {
+         if (err instanceof multer.MulterError) {
+            if (err.code === "LIMIT_FILE_SIZE") {
+               return res.status(400).json({
+                  success: false,
+                  message: "File too large. Maximum size is 50MB.",
+               });
+            }
+            return res.status(400).json({
+               success: false,
+               message: err.message || "File upload error",
+            });
+         }
+         // Handle fileFilter errors
+         return res.status(400).json({
+            success: false,
+            message: err.message || "Invalid file type",
+         });
+      }
+      next();
+   });
+}, uploadDataset);
 
 export default router;
