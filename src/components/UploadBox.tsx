@@ -3,7 +3,11 @@ import Papa from "papaparse";
 import DataPreview from "./DataPreview";
 import QualityScore from "./QualityScore";
 import { analyzeData, ColumnInfo } from "./dataAnalyzer";
-import ConfigurationSummary from "./configuration";
+
+
+
+
+
 
 interface FileData {
   id: string;

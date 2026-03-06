@@ -1,179 +1,254 @@
-import sys
 import os
 import json
-import pandas as pd
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data", "cleaned")
+app = FastAPI(title="AI Application Backend")
 
+# =========================================
+# CONFIG
+# =========================================
 
-# ---------------- LOAD LATEST DATASET ----------------
-def get_latest_csv():
-    if not os.path.exists(DATA_DIR):
-        return None
+BASE_DIR = os.getcwd()
+DATA_DIR = os.path.join(BASE_DIR, "data")
+ML_REPORT_PATH = os.path.join(DATA_DIR, "ml_report.json")
 
-    files = sorted(
-        [f for f in os.listdir(DATA_DIR) if f.endswith(".csv")],
-        reverse=True
-    )
-    return os.path.join(DATA_DIR, files[0]) if files else None
+os.makedirs(DATA_DIR, exist_ok=True)
 
+# =========================================
+# REQUEST MODEL
+# =========================================
 
-# ---------------- PICK BEST NUMERIC COLUMN ----------------
-def pick_numeric_column(question, numeric_cols):
-    q = question.lower()
-    priority = ["sales", "profit", "revenue"]
-
-    for key in priority:
-        for col in numeric_cols:
-            if key in col.lower():
-                return col
-
-    return numeric_cols[0] if numeric_cols else None
+class ChatRequest(BaseModel):
+    message: str
+    session_id: str | None = None
 
 
-# ---------------- BUILD DATASET CONTEXT ----------------
-def build_dataset_context(df):
-    numeric_cols = df.select_dtypes(include="number").columns.tolist()
-    time_cols = [
-        col for col in df.columns
-        if "date" in col.lower() or "year" in col.lower()
+# =========================================
+# SYSTEM STATUS CHECK
+# =========================================
+
+def check_ml_status():
+    if os.path.exists(ML_REPORT_PATH):
+        return {
+            "ml_pipeline_ready": True,
+            "model_loaded": True
+        }
+    return {
+        "ml_pipeline_ready": False,
+        "model_loaded": False
+    }
+
+
+def check_llm_status():
+    return True  # Replace with real LLM health check later
+
+
+# =========================================
+# INTENT DETECTION
+# =========================================
+
+def detect_intent(message: str):
+    q = message.lower()
+
+    greetings = ["hi", "hello", "how are you", "hey"]
+    ml_keywords = [
+        "accuracy", "precision", "recall",
+        "f1", "model", "prediction",
+        "confidence", "feature",
+        "dataset", "overfitting"
     ]
 
+    if any(word in q for word in greetings):
+        return "general"
+
+    if any(word in q for word in ml_keywords):
+        return "ml"
+
+    return "general"
+
+
+# =========================================
+# GENERAL AI REPLY (Mocked)
+# =========================================
+
+def generate_general_reply(message: str):
     return {
-        "rows": int(len(df)),
-        "columns": list(df.columns),
-        "numeric_columns": numeric_cols,
-        "time_columns": time_cols
+        "status": "success",
+        "type": "general",
+        "message": "Hello! I'm your AI assistant. Ask me about general topics or ML insights."
     }
 
 
-# ---------------- SCHEMA VALIDATION ----------------
-def validate_schema(question, df):
-    q = question.lower()
+# =========================================
+# LOAD ML REPORT
+# =========================================
 
-    schema_concepts = {
-        "region": ["region", "state", "area", "zone"],
-        "category": ["category", "segment", "department", "type"]
-    }
-
-    for concept, keywords in schema_concepts.items():
-        if any(k in q for k in keywords):
-            matching_cols = [
-                c for c in df.columns
-                if any(k in c.lower() for k in keywords)
-            ]
-            if not matching_cols:
-                return (
-                    f"The dataset does not contain a '{concept}'-related column. "
-                    f"Available columns are: {', '.join(df.columns)}."
-                )
-
-    return None
-
-
-# ---------------- GENERIC COMPUTATION ENGINE ----------------
-def compute_answer(question, df):
-    q = question.lower()
-
-    # 🔐 Schema-aware guard
-    schema_error = validate_schema(question, df)
-    if schema_error:
-        return schema_error
-
-    numeric_cols = df.select_dtypes(include="number").columns.tolist()
-    if not numeric_cols:
+def load_ml_report():
+    if not os.path.exists(ML_REPORT_PATH):
         return None
 
-    num_col = pick_numeric_column(question, numeric_cols)
-
-    # ---------- BASIC STATISTICS ----------
-    if "minimum" in q or "min" in q or "least" in q:
-        return f"The minimum {num_col} value is {df[num_col].min():.2f}."
-
-    if "maximum" in q or "max" in q or "highest" in q:
-        return f"The maximum {num_col} value is {df[num_col].max():.2f}."
-
-    if "average" in q or "mean" in q:
-        return f"The average {num_col} value is {df[num_col].mean():.2f}."
-
-    if "total" in q or "sum" in q:
-        return f"The total {num_col} value is {df[num_col].sum():.2f}."
-
-    if "median" in q or "middle" in q:
-        return f"The median {num_col} value is {df[num_col].median():.2f}."
-
-    # ---------- YEAR-BASED AGGREGATION ----------
-    date_cols = [c for c in df.columns if "date" in c.lower() or "year" in c.lower()]
-    if date_cols:
-        date_col = date_cols[0]
-        try:
-            df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-            yearly = df.groupby(df[date_col].dt.year)[num_col].sum()
-
-            if "least" in q or "minimum" in q:
-                return f"The year with the lowest total {num_col} was {int(yearly.idxmin())}."
-
-            if "highest" in q or "maximum" in q:
-                return f"The year with the highest total {num_col} was {int(yearly.idxmax())}."
-
-        except Exception:
-            pass
-
-    # ---------- TREND-BASED PREDICTION ----------
-    if "predict" in q or "future" in q or "next" in q:
-        if date_cols:
-            date_col = date_cols[0]
-            try:
-                df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-                df_sorted = df.sort_values(date_col)
-                values = df_sorted[num_col].dropna()
-
-                if len(values) >= 2:
-                    trend = values.iloc[-1] - values.iloc[0]
-                    direction = (
-                        "increasing" if trend > 0 else
-                        "decreasing" if trend < 0 else
-                        "stable"
-                    )
-
-                    return (
-                        f"Based on historical data, {num_col} shows a {direction} trend over time. "
-                        "A precise numerical prediction would require a forecasting model."
-                    )
-            except Exception:
-                pass
-
-    return None
+    with open(ML_REPORT_PATH, "r") as f:
+        return json.load(f)
 
 
-# ---------------- MAIN ENTRY ----------------
-def main():
-    if len(sys.argv) < 2:
-        print(json.dumps({"error": "No question provided"}))
-        return
+# =========================================
+# ML PIPELINE SIMULATION
+# =========================================
 
-    question = sys.argv[1]
-    csv_path = get_latest_csv()
-
-    if not csv_path:
-        print(json.dumps({
-            "question": question,
-            "dataset_context": {},
-            "computed_answer": None
-        }))
-        return
-
-    df = pd.read_csv(csv_path)
-
-    payload = {
-        "question": question,
-        "dataset_context": build_dataset_context(df),
-        "computed_answer": compute_answer(question, df)
+def simulate_ml_run():
+    dummy_report = {
+        "model_name": "RandomForest",
+        "accuracy": 0.91,
+        "precision": 0.89,
+        "recall": 0.88,
+        "f1_score": 0.885,
+        "feature_importance": {
+            "Sales": 0.42,
+            "Region": 0.21,
+            "Category": 0.18,
+            "Discount": 0.09
+        },
+        "class_distribution": {
+            "Low Risk": 120,
+            "High Risk": 45
+        },
+        "latest_prediction": "High Risk",
+        "confidence": 0.87
     }
 
-    print(json.dumps(payload))
+    with open(ML_REPORT_PATH, "w") as f:
+        json.dump(dummy_report, f, indent=4)
 
 
-if __name__ == "__main__":
-    main()
+# =========================================
+# ML RESPONSE ENGINE
+# =========================================
+
+def generate_ml_reply(message: str, report: dict):
+    q = message.lower()
+
+    if "accuracy" in q:
+        return f"Model accuracy is {report['accuracy']:.2f}"
+
+    if "precision" in q:
+        return f"Model precision is {report['precision']:.2f}"
+
+    if "recall" in q:
+        return f"Model recall is {report['recall']:.2f}"
+
+    if "f1" in q:
+        return f"Model F1 score is {report['f1_score']:.2f}"
+
+    if "prediction" in q:
+        return f"Latest prediction is {report['latest_prediction']}"
+
+    if "confidence" in q:
+        return f"Prediction confidence is {report['confidence']:.2f}"
+
+    if "feature" in q:
+        features = report.get("feature_importance", {})
+        top_feature = max(features, key=features.get)
+        return f"Top important feature is {top_feature} with score {features[top_feature]:.2f}"
+
+    if "overfitting" in q:
+        gap = report["accuracy"] - report["f1_score"]
+        if gap > 0.1:
+            return "Model shows signs of overfitting."
+        return "No significant overfitting detected."
+
+    return "Unsupported ML query."
+
+
+# =========================================
+# AI ROUTER
+# =========================================
+
+def route_message(message: str):
+    intent = detect_intent(message)
+    ml_status = check_ml_status()
+
+    # GENERAL CONVERSATION
+    if intent == "general":
+        return generate_general_reply(message)
+
+    # ML REQUEST
+    if intent == "ml":
+
+        if not ml_status["ml_pipeline_ready"]:
+            return {
+                "status": "blocked",
+                "type": "ml",
+                "message": "ML pipeline not executed. Run ML before asking ML-related questions."
+            }
+
+        if not ml_status["model_loaded"]:
+            return {
+                "status": "blocked",
+                "type": "ml",
+                "message": "Model not loaded."
+            }
+
+        report = load_ml_report()
+
+        if not report:
+            return {
+                "status": "error",
+                "type": "ml",
+                "message": "ML report unavailable."
+            }
+
+        reply = generate_ml_reply(message, report)
+
+        return {
+            "status": "success",
+            "type": "ml",
+            "message": reply
+        }
+
+    return {
+        "status": "error",
+        "type": "system",
+        "message": "Unable to process request."
+    }
+
+
+# =========================================
+# ROUTES
+# =========================================
+
+@app.get("/system-status")
+def system_status():
+    ml_status = check_ml_status()
+
+    return {
+        "backend": True,
+        "ml_pipeline_ready": ml_status["ml_pipeline_ready"],
+        "model_loaded": ml_status["model_loaded"],
+        "llm_available": check_llm_status()
+    }
+
+
+@app.post("/chat")
+def chat(request: ChatRequest):
+    return route_message(request.message)
+
+
+@app.post("/run-ml")
+def run_ml():
+    simulate_ml_run()
+    return {
+        "status": "started",
+        "message": "ML pipeline executed successfully."
+    }
+
+
+@app.get("/ml-report")
+def ml_report():
+    report = load_ml_report()
+    if not report:
+        return {
+            "status": "error",
+            "message": "No ML report available."
+        }
+    return report
