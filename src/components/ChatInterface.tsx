@@ -152,11 +152,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ dataset }) => {
               className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-lg p-4 rounded-2xl backdrop-blur-md border ${
-                  msg.type === "user"
+                className={`max-w-lg p-4 rounded-2xl backdrop-blur-md border ${msg.type === "user"
                     ? "bg-gradient-to-r from-purple-500 to-sky-500 text-white"
                     : "bg-white/30 border-white/30 text-gray-800"
-                }`}
+                  }`}
               >
                 <div className="whitespace-pre-wrap">{msg.content}</div>
 

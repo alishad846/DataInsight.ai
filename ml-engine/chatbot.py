@@ -252,3 +252,24 @@ def ml_report():
             "message": "No ML report available."
         }
     return report
+
+    import sys
+import os
+import json
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+REPORT_PATH = os.path.join(BASE_DIR, "reports", "final_report_v1.md")
+
+
+def load_report():
+    if not os.path.exists(REPORT_PATH):
+        return None
+
+    with open(REPORT_PATH, "r", encoding="utf-8") as f:
+        return f.read()
+
+
+def extract_section(report_text, section_name):
+    lines = report_text.split("\n")
+    section_content = []
+    capture = False

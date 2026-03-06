@@ -14,9 +14,8 @@ const FloatingActions: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* Action buttons */}
-      <div className={`space-y-3 mb-4 transform transition-all duration-300 ${
-        isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'
-      }`}>
+      <div className={`space-y-3 mb-4 transform transition-all duration-300 ${isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 pointer-events-none'
+        }`}>
         {actions.map((action, index) => (
           <button
             key={index}

@@ -1,17 +1,22 @@
-import sys
 import json
 import pandas as pd
 from analytics.summary import compute_summary
+import os
 
-try:
-    # ✅ Read JSON from STDIN (not argv)
-    payload = json.load(sys.stdin)
 
-    df = pd.read_csv(payload["dataset_path"])
+def generate_summary(df):
+    os.makedirs("reports", exist_ok=True)
+
     summary = compute_summary(df)
 
-    print(json.dumps(summary))
+    with open("reports/eda_summary.json", "w") as f:
+        json.dump(summary, f, indent=4)
 
-except Exception as e:
-    sys.stderr.write(str(e))
-    sys.exit(1)
+    print("EDA summary saved to reports/eda_summary.json")
+
+    return summary
+
+
+# Only run this block if file executed directly
+if __name__ == "__main__":
+    print("This script should be used inside pipeline.")

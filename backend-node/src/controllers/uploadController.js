@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import mongoose from "mongoose";
 import { createJob } from "../services/jobService.js";
+import jobService from "../services/jobService.js";
 
 export const uploadDataset = async (req, res) => {
   try {

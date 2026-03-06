@@ -19,3 +19,11 @@ export const createJob = async ({ job_id, dataset_id, filepath }) => {
 
     return job;
 };
+
+export const CreateJob = async (data) => {
+    return {
+        status: "success",
+        message: "Job created",
+        data: data
+    };
+};
