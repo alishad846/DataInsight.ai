@@ -1,0 +1,461 @@
+{
+    "file_info": {
+        "file_name": "Sales Order (sale.order).xlsx",
+        "file_path": "C:\\Users\\sachi\\OneDrive\\Desktop\\Sales Order (sale.order).xlsx",
+        "file_format": "xlsx",
+        "file_size_kb": 57.98,
+        "file_size_mb": 0.0566,
+        "encoding": "N/A"
+    },
+    "shape": {
+        "rows": 981,
+        "columns": 9,
+        "total_cells": 8829,
+        "memory_usage_kb": 468.29,
+        "memory_usage_mb": 0.4573
+    },
+    "dataset_type": {
+        "detected_type": "time_series",
+        "likely_ml_task": "time_series",
+        "has_datetime_column": true,
+        "datetime_columns": [
+            "Order Date"
+        ],
+        "numeric_column_count": 1,
+        "categorical_column_count": 7
+    },
+    "column_summary": {
+        "total": 9,
+        "numeric": 1,
+        "categorical": 7,
+        "datetime": 1,
+        "boolean": 0,
+        "constant": 2,
+        "unique_id_like": 1
+    },
+    "columns": [
+        {
+            "name": "Order Reference",
+            "dtype": "object",
+            "dtype_category": "categorical",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "non_null_count": 981,
+            "non_null_percentage": 100.0,
+            "unique_count": 981,
+            "unique_percentage": 100.0,
+            "is_constant": false,
+            "is_unique_id": true,
+            "sample_values": [
+                "invoiced (689)",
+                "VSO/2601347",
+                "VSO/2601282",
+                "VSO/2601197",
+                "VSO/2601153"
+            ],
+            "memory_usage_kb": 65.43,
+            "categorical_stats": {
+                "top_value": "invoiced (689)",
+                "top_value_count": 1,
+                "top_value_percentage": 0.1,
+                "value_counts": {
+                    "invoiced (689)": 1,
+                    "VSO/2500053": 1,
+                    "VSO/2500040": 1,
+                    "VSO/2500052": 1,
+                    "VSO/2500051": 1,
+                    "VSO/2500050": 1,
+                    "VSO/2500049": 1,
+                    "VSO/2500047": 1,
+                    "VSO/2500046": 1,
+                    "VSO/2500045": 1,
+                    "VSO/2500044": 1,
+                    "VSO/2500093": 1,
+                    "VSO/2500043": 1,
+                    "VSO/2500042": 1,
+                    "VSO/2500041": 1,
+                    "VSO/2500033": 1,
+                    "VSO/2500039": 1,
+                    "VSO/2500009": 1,
+                    "VSO/2500005": 1,
+                    "VSO/2500004": 1
+                },
+                "avg_string_length": 11.17,
+                "max_string_length": 14
+            }
+        },
+        {
+            "name": "Order Reference.1",
+            "dtype": "object",
+            "dtype_category": "categorical",
+            "null_count": 260,
+            "null_percentage": 26.5,
+            "non_null_count": 721,
+            "non_null_percentage": 73.5,
+            "unique_count": 657,
+            "unique_percentage": 66.97,
+            "is_constant": false,
+            "is_unique_id": false,
+            "sample_values": [
+                "Order #10457193",
+                "INSTA CASH ORDER 12/1/2026",
+                "INSTA ORDER 11/1/2026",
+                "INSTA ORDER 21/1/2026",
+                "INSTA ORDER 23/1/2026"
+            ],
+            "memory_usage_kb": 61.137,
+            "categorical_stats": {
+                "top_value": "Manual Order",
+                "top_value_count": 22,
+                "top_value_percentage": 3.05,
+                "value_counts": {
+                    "Manual Order": 22,
+                    "Manual order": 7,
+                    "Careem Order 4/12/2025": 4,
+                    "InstaShop 26-11-2025 to 30-11-2025": 4,
+                    "Order #10456904": 3,
+                    "INSTASHOP ORDER 08/11/2025": 3,
+                    "Careem Order 7/12/2025": 3,
+                    "Order #10457088": 2,
+                    "Order #10456981": 2,
+                    "CAREEM ORDER 25/12/2025": 2,
+                    "Amazon 19-01-2026 & 20-01-2026": 2,
+                    "Amazon 13th Oct to 23 Oct 2025": 2,
+                    "03-12-2025 Insta Sale": 2,
+                    "Order #10457039": 2,
+                    "Mr. Ali Hussain": 2,
+                    "RQ/ 2511049": 2,
+                    "Order #10457109": 2,
+                    "Order #10457089": 2,
+                    "Order #10456928": 2,
+                    "10456890": 2
+                },
+                "avg_string_length": 18.11,
+                "max_string_length": 47
+            }
+        },
+        {
+            "name": "Order Date",
+            "dtype": "datetime64[ns]",
+            "dtype_category": "datetime",
+            "null_count": 3,
+            "null_percentage": 0.31,
+            "non_null_count": 978,
+            "non_null_percentage": 99.69,
+            "unique_count": 977,
+            "unique_percentage": 99.59,
+            "is_constant": false,
+            "is_unique_id": false,
+            "sample_values": [
+                "2026-02-26 13:16:46",
+                "2026-01-27 10:53:23",
+                "2026-01-26 14:51:54",
+                "2026-01-26 14:50:13",
+                "2026-01-26 14:41:33"
+            ],
+            "memory_usage_kb": 7.789,
+            "datetime_stats": {
+                "min_date": "2025-10-11 19:27:37",
+                "max_date": "2026-03-06 12:59:19",
+                "date_range_days": 145,
+                "unique_years": [
+                    2025,
+                    2026
+                ],
+                "unique_months": 6
+            }
+        },
+        {
+            "name": "Customer",
+            "dtype": "object",
+            "dtype_category": "categorical",
+            "null_count": 3,
+            "null_percentage": 0.31,
+            "non_null_count": 978,
+            "non_null_percentage": 99.69,
+            "unique_count": 99,
+            "unique_percentage": 10.09,
+            "is_constant": false,
+            "is_unique_id": false,
+            "sample_values": [
+                "Customer Via Pet Central",
+                "Haiwanati Pets Trading LLC",
+                "Customer Via Instashop",
+                "Customer Via Instashop",
+                "Customer Via Instashop"
+            ],
+            "memory_usage_kb": 77.585,
+            "categorical_stats": {
+                "top_value": "Customer Via Pet Central",
+                "top_value_count": 241,
+                "top_value_percentage": 24.64,
+                "value_counts": {
+                    "Customer Via Pet Central": 241,
+                    "Customer Via Instashop": 158,
+                    "Customer Via Careem": 73,
+                    "Customer Via Amazon": 43,
+                    "Y E S International Trading LLC": 30,
+                    "Cash Customer": 25,
+                    "The Pets Club FZC LLC": 21,
+                    "Olga Cherkasova Pets Trading LLC": 20,
+                    "Marketplace E Commerce L.L.C": 20,
+                    "Haiwanati Pets Trading LLC": 14,
+                    "The Pet Stop Trading LLC": 13,
+                    "20 Plaza LLC": 12,
+                    "Paws & Relax Pets Salon LLC": 11,
+                    "Pets Lounge Pets Grooming LLC": 10,
+                    "Transnet General Trading LLC": 9,
+                    "Pet Sky DMCC": 9,
+                    "Luxury Pets Grooming LLC": 8,
+                    "Aqua Pet Care LLC": 8,
+                    "BPK Global Trading LLC": 8,
+                    "Customer Via Now Now": 8
+                },
+                "avg_string_length": 24.01,
+                "max_string_length": 94
+            }
+        },
+        {
+            "name": "Salesperson",
+            "dtype": "object",
+            "dtype_category": "categorical",
+            "null_count": 76,
+            "null_percentage": 7.75,
+            "non_null_count": 905,
+            "non_null_percentage": 92.25,
+            "unique_count": 4,
+            "unique_percentage": 0.41,
+            "is_constant": false,
+            "is_unique_id": false,
+            "sample_values": [
+                "Hafnas Nasar",
+                "Finance",
+                "Finance",
+                "Finance",
+                "Finance"
+            ],
+            "memory_usage_kb": 62.432,
+            "categorical_stats": {
+                "top_value": "Finance",
+                "top_value_count": 374,
+                "top_value_percentage": 41.33,
+                "value_counts": {
+                    "Finance": 374,
+                    "Orders & Dispatch": 247,
+                    "Hafnas Nasar": 196,
+                    "OdooBot": 88
+                },
+                "avg_string_length": 10.81,
+                "max_string_length": 17
+            }
+        },
+        {
+            "name": "Activities",
+            "dtype": "object",
+            "dtype_category": "categorical",
+            "null_count": 979,
+            "null_percentage": 99.8,
+            "non_null_count": 2,
+            "non_null_percentage": 0.2,
+            "unique_count": 1,
+            "unique_percentage": 0.1,
+            "is_constant": true,
+            "is_unique_id": false,
+            "sample_values": [
+                "Exception",
+                "Exception"
+            ],
+            "memory_usage_kb": 30.848,
+            "categorical_stats": {
+                "top_value": "Exception",
+                "top_value_count": 2,
+                "top_value_percentage": 100.0,
+                "value_counts": {
+                    "Exception": 2
+                },
+                "avg_string_length": 9.0,
+                "max_string_length": 9
+            }
+        },
+        {
+            "name": "Company",
+            "dtype": "object",
+            "dtype_category": "categorical",
+            "null_count": 3,
+            "null_percentage": 0.31,
+            "non_null_count": 978,
+            "non_null_percentage": 99.69,
+            "unique_count": 1,
+            "unique_percentage": 0.1,
+            "is_constant": true,
+            "is_unique_id": false,
+            "sample_values": [
+                "Velocity International Trading LLC",
+                "Velocity International Trading LLC",
+                "Velocity International Trading LLC",
+                "Velocity International Trading LLC",
+                "Velocity International Trading LLC"
+            ],
+            "memory_usage_kb": 87.131,
+            "categorical_stats": {
+                "top_value": "Velocity International Trading LLC",
+                "top_value_count": 978,
+                "top_value_percentage": 100.0,
+                "value_counts": {
+                    "Velocity International Trading LLC": 978
+                },
+                "avg_string_length": 34.0,
+                "max_string_length": 34
+            }
+        },
+        {
+            "name": "Total",
+            "dtype": "float64",
+            "dtype_category": "numeric",
+            "null_count": 0,
+            "null_percentage": 0.0,
+            "non_null_count": 981,
+            "non_null_percentage": 100.0,
+            "unique_count": 810,
+            "unique_percentage": 82.57,
+            "is_constant": false,
+            "is_unique_id": false,
+            "sample_values": [
+                3187231.312,
+                76.472,
+                168.0,
+                79.542,
+                3074.785
+            ],
+            "memory_usage_kb": 7.789,
+            "numeric_stats": {
+                "min": 0.0,
+                "max": 3187231.312,
+                "mean": 8023.434275,
+                "median": 600.39,
+                "std": 104987.184478,
+                "variance": 11022308904.625443,
+                "skewness": 28.747134,
+                "kurtosis": 862.726503,
+                "q1": 160.95,
+                "q3": 2205.0,
+                "iqr": 2044.05,
+                "lower_fence": -2905.125,
+                "upper_fence": 5271.075,
+                "outlier_count": 134,
+                "outlier_percentage": 13.66,
+                "zero_count": 47,
+                "negative_count": 0,
+                "positive_count": 934
+            }
+        },
+        {
+            "name": "Invoice Status",
+            "dtype": "object",
+            "dtype_category": "categorical",
+            "null_count": 3,
+            "null_percentage": 0.31,
+            "non_null_count": 978,
+            "non_null_percentage": 99.69,
+            "unique_count": 3,
+            "unique_percentage": 0.31,
+            "is_constant": false,
+            "is_unique_id": false,
+            "sample_values": [
+                "Fully Invoiced",
+                "Fully Invoiced",
+                "Fully Invoiced",
+                "Fully Invoiced",
+                "Fully Invoiced"
+            ],
+            "memory_usage_kb": 69.15,
+            "categorical_stats": {
+                "top_value": "Fully Invoiced",
+                "top_value_count": 689,
+                "top_value_percentage": 70.45,
+                "value_counts": {
+                    "Fully Invoiced": 689,
+                    "Nothing to Invoice": 288,
+                    "To Invoice": 1
+                },
+                "avg_string_length": 15.17,
+                "max_string_length": 18
+            }
+        }
+    ],
+    "missing_values": {
+        "total_missing": 1327,
+        "total_missing_percentage": 15.03,
+        "columns_with_missing_count": 7,
+        "columns_without_missing_count": 2,
+        "columns_with_missing": [
+            {
+                "column": "Activities",
+                "missing_count": 979,
+                "missing_percentage": 99.8
+            },
+            {
+                "column": "Order Reference.1",
+                "missing_count": 260,
+                "missing_percentage": 26.5
+            },
+            {
+                "column": "Salesperson",
+                "missing_count": 76,
+                "missing_percentage": 7.75
+            },
+            {
+                "column": "Order Date",
+                "missing_count": 3,
+                "missing_percentage": 0.31
+            },
+            {
+                "column": "Customer",
+                "missing_count": 3,
+                "missing_percentage": 0.31
+            },
+            {
+                "column": "Company",
+                "missing_count": 3,
+                "missing_percentage": 0.31
+            },
+            {
+                "column": "Invoice Status",
+                "missing_count": 3,
+                "missing_percentage": 0.31
+            }
+        ],
+        "severe_missing_columns": [
+            {
+                "column": "Activities",
+                "missing_count": 979,
+                "missing_percentage": 99.8
+            }
+        ],
+        "rows_with_any_missing": 980,
+        "completely_empty_rows": 0
+    },
+    "duplicates": {
+        "duplicate_rows": 0,
+        "duplicate_percentage": 0.0,
+        "unique_rows": 981
+    },
+    "correlation": {
+        "method": "pearson",
+        "matrix": {},
+        "high_correlation_pairs": [],
+        "note": "Less than 2 numeric columns; correlation skipped."
+    },
+    "data_quality": {
+        "score": 63.3,
+        "grade": "C",
+        "issues": [
+            "1327 missing values across dataset (15.03%)",
+            "Column 'Activities' has 99.8% missing values (severe)",
+            "Constant columns (zero variance): Activities, Company",
+            "High outliers in 'Total': 13.66%",
+            "High skewness in 'Total': 28.75"
+        ],
+        "recommendation": "Moderate issues. Cleaning required."
+    }
+}

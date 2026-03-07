@@ -1,0 +1,207 @@
+{
+    "source_file": "C:\\Users\\sachi\\OneDrive\\Desktop\\Sales Order (sale.order).xlsx",
+    "original_shape": {
+        "rows": 981,
+        "columns": 9
+    },
+    "original_columns": [
+        "Order Reference",
+        "Order Reference.1",
+        "Order Date",
+        "Customer",
+        "Salesperson",
+        "Activities",
+        "Company",
+        "Total",
+        "Invoice Status"
+    ],
+    "dropped_columns": {
+        "constant": [
+            "Company"
+        ],
+        "missing_gt_50pct": [
+            "Activities"
+        ],
+        "id_like": [
+            "Order Reference"
+        ],
+        "free_text": [
+            "Order Reference.1"
+        ],
+        "total_dropped": 4
+    },
+    "imputation": {
+        "Order Date": "datetime \u2192 forward-fill",
+        "Customer": "categorical \u2192 mode ('Customer Via Pet Central')",
+        "Salesperson": "categorical \u2192 mode ('Finance')",
+        "Invoice Status": "categorical \u2192 mode ('Fully Invoiced')"
+    },
+    "datetime_features_added": [
+        "order_date_year",
+        "order_date_month",
+        "order_date_day",
+        "order_date_day_of_week",
+        "order_date_hour",
+        "order_date_is_weekend"
+    ],
+    "outlier_capping": {
+        "Total": {
+            "lower_fence": -2905.125,
+            "upper_fence": 5271.075,
+            "capped_count": 134
+        },
+        "order_date_hour": {
+            "lower_fence": 1.5,
+            "upper_fence": 29.5,
+            "capped_count": 6
+        },
+        "order_date_is_weekend": {
+            "lower_fence": 0.0,
+            "upper_fence": 0.0,
+            "capped_count": 136
+        }
+    },
+    "skewness_correction": {
+        "Total": {
+            "original_skewness": 1.1861,
+            "transform": "log1p"
+        }
+    },
+    "label_encoding": {
+        "Customer": {
+            "mapping": {
+                "20 Plaza LLC": 0,
+                "AL DAHIBA FOR THE MILLING AND FEED TRADE": 1,
+                "AQUARIUM LIVES CENTRE - SOLE PROPRIETORSHIP L.L.C. - BRANCH": 2,
+                "Al Mushrif Aquarium Fish Trading LLC": 3,
+                "Al Sadaf Al Abyadh Birds Feeds.TR": 4,
+                "Al Tella Animal Feeds LLC": 5,
+                "Al Tella Animal Feeds LLC, Delivery": 6,
+                "Al Waha Al Khadhra Ornamental Birds & Fish Br2": 7,
+                "Al Waha Al Khadhra Ornamental Birds & Fish Br2, Al Waha Al Khadhra Ornamental Birds & Fish Br2": 8,
+                "Amal Raj - Cash Customer": 9,
+                "Amore Veterinary Clinic": 10,
+                "Animal Den Trading LLC": 11,
+                "Animal Zone LLC": 12,
+                "Animal Zone LLC (Branch)": 13,
+                "Aqua Pet Care LLC": 14,
+                "Aqua Pets Dreams Aquatic & Live Animals Trading LLC": 15,
+                "Aquarium Planet For Fish And Live Animals Trading LLC": 16,
+                "BIRDS EXHIBITION": 17,
+                "BPK Global Trading LLC": 18,
+                "Bandidos Retail LLC": 19,
+                "Beauty Pets": 20,
+                "Best Pets Unlimited Trading L.L.C": 21,
+                "Cash Customer": 22,
+                "Crazy Pets Gooming Salon LLC": 23,
+                "Creatures Oasis": 24,
+                "Customer Via Amazon": 25,
+                "Customer Via Careem": 26,
+                "Customer Via Instashop": 27,
+                "Customer Via Now Now": 28,
+                "Customer Via Pet Central": 29,
+                "Cute Animal Pets Trading, Delivery": 30,
+                "DME Group for Animals & Birds Feed Trading Co. LLC": 31,
+                "Dahabi Birds And Animals Food Trading LLC, Dahabi Birds And Animals Food Trading LLC": 32,
+                "El Grocer by smiles": 33,
+                "Elgrocer by Smiles": 34,
+                "Geosec Cybersecurity Consultancy LLC": 35,
+                "German Standard Veterinary Medicines Trading L.L.C": 36,
+                "Green Desert Aquarium Trading LLC": 37,
+                "Hafnas Nasar": 38,
+                "Haiwanati Pets Trading LLC": 39,
+                "Iris Pet Animal Accessories LLC": 40,
+                "Iris Pet Animal Accessories LLC - Branch": 41,
+                "Jacee Ekart L.L.LC FZ": 42,
+                "KMK Pets L.L.C.": 43,
+                "Kindai Aquatic Fish & Live Animal Trading LLC": 44,
+                "King Animal Planet-kcbg": 45,
+                "Luxury Pets Grooming LLC": 46,
+                "Marketplace E Commerce L.L.C": 47,
+                "Max Zylen Online Seller": 48,
+                "McWild Animal Feeds Trading LLC": 49,
+                "Meowtropolis Cat Cafe": 50,
+                "Modern Vet Hospital L.L.C.": 51,
+                "Nine Tails Pets Grooming": 52,
+                "Olga Cherkasova Pets Trading LLC": 53,
+                "PETS ZONE SALE OF ANIMALS ACCESSORIES AND SUPPLIES - L.L.C": 54,
+                "PRESTIGE PETS KINGDOM PETS HAIRDRESSING SALON - L.L.C - S.P.C": 55,
+                "Parabath Pet Food & Accessories Supplies": 56,
+                "Paws & Relax Pets Salon LLC": 57,
+                "Perkpets Grooming Station & Pet shop": 58,
+                "Pet Central LLC": 59,
+                "Pet First Veterinary Clinic": 60,
+                "Pet First Veterinary Clinic, Delivery": 61,
+                "Pet Lounge Veterinary Clinic LLC": 62,
+                "Pet Magnet": 63,
+                "Pet Magnet, Ahmad Khatib": 64,
+                "Pet Sky DMCC": 65,
+                "Pet Street Trading - Sole Proprietorship L.L.C": 66,
+                "Pet Zone LLC": 67,
+                "Petopia Pet Salon": 68,
+                "Pets 4 you": 69,
+                "Pets Lounge Pets Grooming LLC": 70,
+                "Pets on click": 71,
+                "Petzi": 72,
+                "Purrfect Pet Supplies-L.L.C-O.P": 73,
+                "Reeflections Fish & Live Animal Trading LLC": 74,
+                "SNH Packing General Trading LLC": 75,
+                "SYNERGY VETERINARY CLINIC L.L.C": 76,
+                "Saluki World Pets And Fodders Trading LLC": 77,
+                "Shamardal Bird Accessories Trading.": 78,
+                "Smart Pets Aquatic & Live animals Trading": 79,
+                "Smart Pets Care LLC - S.C.P": 80,
+                "Super Lucky Pets LLC": 81,
+                "The Pet Shack Animal Accessories Trading LLC": 82,
+                "The Pet Stop Trading LLC": 83,
+                "The Pets Club FZC LLC": 84,
+                "The Private Office of H.H The Ruler of Dubai, HHPO PURCHASE AND SUPPLY OFFICE": 85,
+                "Think Fish LLC": 86,
+                "Transnet General Trading LLC": 87,
+                "Velocity International  LLC": 88,
+                "Vogue Intenational LLC - FZC": 89,
+                "Waggin Tails Pets Supplements Trading LLC": 90,
+                "Wahet Africano Pets Trading - Sole Proprietorship L.L.C": 91,
+                "Y E S International Trading LLC": 92,
+                "Za'abeel Office - His Highness the Ruler's Court": 93,
+                "Zoo Al Shahama Animal Feeds": 94,
+                "himanshu": 95,
+                "shad": 96,
+                "test": 97,
+                "vivek sir": 98
+            }
+        },
+        "Salesperson": {
+            "mapping": {
+                "Finance": 0,
+                "Hafnas Nasar": 1,
+                "OdooBot": 2,
+                "Orders & Dispatch": 3
+            }
+        },
+        "Invoice Status": {
+            "mapping": {
+                "Fully Invoiced": 0,
+                "Nothing to Invoice": 1,
+                "To Invoice": 2
+            }
+        }
+    },
+    "cleaned_shape": {
+        "rows": 981,
+        "columns": 10
+    },
+    "cleaned_columns": [
+        "Customer",
+        "Salesperson",
+        "Total",
+        "Invoice Status",
+        "order_date_year",
+        "order_date_month",
+        "order_date_day",
+        "order_date_day_of_week",
+        "order_date_hour",
+        "order_date_is_weekend"
+    ],
+    "status": "success"
+}
