@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
 
-/* ----------------------------------------
-   Dataset Schema
-   Handles full ML lifecycle metadata
----------------------------------------- */
-
 const DatasetSchema = new mongoose.Schema(
   {
+    /* ---------- EXTERNAL JOB ID ---------- */
+    job_id: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+
     /* ---------- BASIC FILE INFO ---------- */
     filename: {
       type: String,
@@ -19,14 +22,63 @@ const DatasetSchema = new mongoose.Schema(
       required: true,
     },
 
-    /* ---------- PIPELINE STATUS ---------- */
-    status: {
-      type: String,
-      enum: ["uploaded", "cleaned", "trained", "ready"],
-      default: "uploaded",
+    /* ---------- OPTIONAL USER INPUTS ---------- */
+    optional_inputs: {
+      target_column: {
+        type: String,
+        default: null,
+      },
+
+      dataset_description: {
+        type: String,
+        maxlength: 200,
+        default: null,
+      },
     },
 
-    /* ---------- ML PIPELINE ARTIFACTS ---------- */
+    /* ---------- SYSTEM METADATA (ADDED BY WORKER LATER) ---------- */
+    system_metadata: {
+      system_selected_target_column: {
+        type: String,
+        default: null,
+      },
+
+      dropped_columns: {
+        type: [String],
+        default: [],
+      },
+
+      problem_type: {
+        type: String,
+        enum: ["classification", "regression"],
+        default: null,
+      },
+    },
+
+    /* ---------- JOB STATE MACHINE ---------- */
+    status: {
+      type: String,
+      enum: [
+        "UPLOADED",
+        "ETL_RUNNING",
+        "ETL_COMPLETED",
+        "TRAINING_RUNNING",
+        "TRAINING_COMPLETED",
+        "REPORT_GENERATED",
+        "INDEXED",
+        "COMPLETED",
+        "FAILED",
+      ],
+      default: "UPLOADED",
+    },
+
+    /* ---------- ERROR HANDLING ---------- */
+    error_message: {
+      type: String,
+      default: null,
+    },
+
+    /* ---------- ML ARTIFACTS ---------- */
     cleanedFilePath: {
       type: String,
       default: null,
@@ -46,15 +98,9 @@ const DatasetSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-
-    /* ---------- METADATA ---------- */
-    uploadedAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   {
-    timestamps: true, // adds createdAt & updatedAt
+    timestamps: true,
   }
 );
 
